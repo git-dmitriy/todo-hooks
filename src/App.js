@@ -17,9 +17,15 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    document.addEventListener("click", handleClick);
+
     localStorage.setItem("todos", JSON.stringify(todos));
+    return () => {
+      document.removeEventListener("click", handleClick);
+    };
   }, [todoTitle]);
   // empty [] - emulate componentDidMount
+
   const addTodoTitle = (event) => {
     if (event.key === "Enter") {
       setTodos([
@@ -33,6 +39,8 @@ export default function App() {
       setTodoTitle("");
     }
   };
+
+  const handleClick = () => console.log("Click!");
 
   return (
     <div className="container">
