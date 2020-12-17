@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import TodoList from "./TodoList";
+import { Context } from "./context";
 
 export default function App() {
   // state = {
@@ -42,21 +43,42 @@ export default function App() {
 
   const handleClick = () => console.log("Click!");
 
+  const removeTodo = (id) => {
+    setTodos(
+      todos.filter((todo) => {
+        return todo.id !== id;
+      })
+    );
+  };
+
+  const toggleTodo = (id) => {
+    setTodos(
+      todos.map((todo) => {
+        if (todo.id === id) {
+          todo.completed = !todo.completed;
+        }
+        return todo;
+      })
+    );
+  };
+
   return (
-    <div className="container">
-      <h1>Todo app</h1>
+    <Context.Provider value={{ removeTodo, toggleTodo }}>
+      <div className="container">
+        <h1>Todo app</h1>
 
-      <div className="input-field">
-        <input
-          type="text"
-          value={todoTitle}
-          onChange={(event) => setTodoTitle(event.target.value)}
-          onKeyDown={addTodoTitle}
-        />
-        <label>Todo name</label>
+        <div className="input-field">
+          <input
+            type="text"
+            value={todoTitle}
+            onChange={(event) => setTodoTitle(event.target.value)}
+            onKeyDown={addTodoTitle}
+          />
+          <label>Todo name</label>
+        </div>
+
+        <TodoList todos={todos} />
       </div>
-
-      <TodoList todos={todos} />
-    </div>
+    </Context.Provider>
   );
 }
